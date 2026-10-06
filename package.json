@@ -1,0 +1,19 @@
+{
+  "name": "meo-bom",
+  "private": true,
+  "version": "0.1.0",
+  "description": "Mèo Bom: a Vietnamese-first 3D online card game for 2 to 5 players",
+  "workspaces": ["packages/*", "apps/*"],
+  "scripts": {
+    "dev": "concurrently -k -n server,web -c yellow,cyan \"npm run dev -w @meobom/server\" \"npm run dev -w @meobom/web\"",
+    "build": "npm run build -w @meobom/web && npm run build -w @meobom/server",
+    "start": "node apps/server/dist/server.js",
+    "test": "npm test -w @meobom/engine && npm test -w @meobom/server",
+    "typecheck": "tsc -p packages/engine && tsc -p apps/server && tsc -p apps/web"
+  },
+  "devDependencies": {
+    "concurrently": "^9.1.0",
+    "typescript": "^5.6.3"
+  },
+  "engines": { "node": ">=20" }
+}

@@ -36,7 +36,11 @@ export function toast(text: string) {
   useStore.setState({ toast: { text, id: ++toastId } });
 }
 
-const socket: Socket<ServerToClient, ClientToServer> = io({ transports: ['websocket', 'polling'] });
+const socket: Socket<ServerToClient, ClientToServer> = io(
+  // Set VITE_SERVER_URL when the web app is hosted apart from the game server (e.g. on Vercel).
+  import.meta.env.VITE_SERVER_URL || undefined,
+  { transports: ['websocket', 'polling'] },
+);
 
 /* ---------- local persistence (per browser) ---------- */
 

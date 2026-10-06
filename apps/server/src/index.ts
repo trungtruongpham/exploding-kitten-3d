@@ -40,7 +40,10 @@ const http = createServer((req, res) => {
   createReadStream(file).pipe(res);
 });
 
-const io = new Server<ClientToServer, ServerToClient>(http, { cors: { origin: process.env.CORS_ORIGIN ?? false } });
+// CORS_ORIGIN: comma-separated web origins allowed to connect (e.g. the Vercel site), or * for any.
+const corsEnv = process.env.CORS_ORIGIN?.trim();
+const corsOrigin = !corsEnv ? false : corsEnv === '*' ? true : corsEnv.split(',').map((o) => o.trim().replace(/\/$/, ''));
+const io = new Server<ClientToServer, ServerToClient>(http, { cors: { origin: corsOrigin } });
 const rooms = new RoomManager({
   roomState: (sid, info) => io.to(sid).emit('room:state', info),
   gameUpdate: (sid, u) => io.to(sid).emit('game:update', u),

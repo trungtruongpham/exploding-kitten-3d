@@ -1,0 +1,13 @@
+services:
+  - type: web
+    name: meo-bom-server
+    runtime: node
+    plan: free
+    buildCommand: npm ci && npm run build -w @meobom/server
+    startCommand: npm start
+    healthCheckPath: /healthz
+    envVars:
+      - key: NODE_VERSION
+        value: "22"
+      - key: CORS_ORIGIN
+        sync: false

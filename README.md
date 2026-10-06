@@ -30,6 +30,16 @@ PORT=3001 npm start   # open http://localhost:3001
 
 Or with Docker: `docker build -t meo-bom . && docker run -p 3001:3001 meo-bom`.
 
+## Deploy: web on Vercel, game server elsewhere
+
+Vercel serves the static web app well, but its functions can't hold the long-lived WebSocket the game uses, so the Socket.IO server runs on a host that keeps a process alive (Render, Railway, Fly.io). Alternatively, skip Vercel and deploy just the server (or the Dockerfile): it serves the web app too.
+
+1. **Server (Render example).** New → Blueprint, pick this repo; `render.yaml` sets it up (`npm run build -w @meobom/server`, `npm start`, health check `/healthz`). Set `CORS_ORIGIN` to your Vercel URL, e.g. `https://meo-bom.vercel.app` (comma-separate several, or `*`). Note the server URL, e.g. `https://meo-bom-server.onrender.com`.
+2. **Web (Vercel).** Import the repo with the root directory left as the repo root; `vercel.json` sets the install, build and output (`apps/web/dist`) and rewrites invite links `/r/CODE` to the app. Add the environment variable `VITE_SERVER_URL` = the server URL from step 1, then deploy (redeploy after changing it, since Vite bakes it in at build time).
+3. Open the Vercel URL, create a room and share the invite link.
+
+Rooms live in the server's memory: a restart or a free-tier sleep ends games in progress.
+
 ## Tests
 
 ```bash

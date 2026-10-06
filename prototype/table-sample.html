@@ -1,7 +1,7 @@
-<title>Fuse Cats Table</title>
+<title>Bàn Chơi Mèo Bom</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fredoka:wght@500;600;700&family=Nunito:wght@500;700;800&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@500;600;700;800&family=Nunito:wght@500;700;800&display=swap">
 <style>
 /* Layout: full-bleed 3D café table; HUD floats in the corners, hand fans along the bottom edge. Single dark "after-hours café" look. */
 :root{
@@ -16,7 +16,7 @@
   --amber-ink:#2a1a08;
   --danger:#ff5b3d;
   --ok:#52c784;
-  --display:'Fredoka', 'Trebuchet MS', system-ui, sans-serif;
+  --display:'Baloo 2', 'Trebuchet MS', system-ui, sans-serif;
   --body:'Nunito', 'Segoe UI', system-ui, sans-serif;
 }
 html,body{height:100%}
@@ -68,7 +68,7 @@ kbd{font-family:var(--body);font-size:.72em;font-weight:800;opacity:.7;border:1p
 
 #log{position:fixed;left:16px;bottom:calc(env(safe-area-inset-bottom,0px) + 16px);margin:0;padding:10px 14px;list-style:none;width:250px;max-height:30vh;overflow:hidden;background:var(--panel);border:1px solid var(--line);border-radius:14px;font-size:13px;line-height:1.45;color:var(--muted);z-index:4;display:flex;flex-direction:column-reverse;gap:2px}
 #log li:first-child{color:var(--fg)}
-#log::before{content:"Table log";position:absolute;top:-22px;left:2px;font-size:11px;font-weight:800;letter-spacing:.12em;text-transform:uppercase;color:var(--muted)}
+#log::before{content:"Diễn biến ván";position:absolute;top:-22px;left:2px;font-size:11px;font-weight:800;letter-spacing:.12em;text-transform:uppercase;color:var(--muted)}
 
 #labels{position:fixed;inset:0;pointer-events:none;z-index:3}
 .plabel{position:absolute;transform:translate(-50%,-100%);background:var(--panel);border:1px solid var(--line);border-radius:999px;padding:3px 10px 3px 6px;font-size:13px;font-weight:800;white-space:nowrap;display:flex;gap:6px;align-items:center;transition:box-shadow .2s}
@@ -131,16 +131,16 @@ kbd{font-family:var(--body);font-size:.72em;font-weight:800;opacity:.7;border:1p
 }
 </style>
 
-<div id="stage"><canvas id="c" aria-label="3D card table"></canvas></div>
+<div id="stage"><canvas id="c" aria-label="Bàn chơi bài 3D"></canvas></div>
 <div id="labels"></div>
 <div id="vignette"></div>
 <div id="flash"></div>
-<div id="pop">HISS!</div>
+<div id="pop">KHÈ!</div>
 
 <header class="top">
-  <div class="brand"><span class="logo">Fuse Cats</span><span class="tag">3D table sample</span></div>
-  <div class="seg" role="group" aria-label="Number of players">
-    <span>Players</span>
+  <div class="brand"><span class="logo">Mèo Bom</span><span class="tag">Bản mẫu bàn chơi 3D</span></div>
+  <div class="seg" role="group" aria-label="Số người chơi">
+    <span>Người chơi</span>
     <button id="p2" data-n="2" aria-pressed="false">2</button>
     <button id="p3" data-n="3" aria-pressed="false">3</button>
     <button id="p4" data-n="4" aria-pressed="false">4</button>
@@ -148,67 +148,68 @@ kbd{font-family:var(--body);font-size:.72em;font-weight:800;opacity:.7;border:1p
   </div>
 </header>
 
-<aside class="stats" aria-label="Deck">
-  <div class="stat"><b id="deckN">0</b><small>Draw pile</small></div>
-  <div class="stat fuse"><b id="fuseN">0</b><small>Fuse Cats</small></div>
+<aside class="stats" aria-label="Chồng bài">
+  <div class="stat"><b id="deckN">0</b><small>Bài rút</small></div>
+  <div class="stat fuse"><b id="fuseN">0</b><small>Mèo Bom</small></div>
 </aside>
 
-<div id="banner" aria-live="polite"><span id="bannerText">Dealing…</span></div>
+<div id="banner" aria-live="polite"><span id="bannerText">Đang chia bài…</span></div>
 <div id="hissbar" hidden>
   <div class="t" id="hissText"></div>
-  <button class="hissbtn" id="hissBtn" hidden>Hiss!</button>
+  <button class="hissbtn" id="hissBtn" hidden>Khè!</button>
   <div class="track"><i id="hissTrack"></i></div>
 </div>
 <div id="selInfo" hidden></div>
 
-<nav class="actions" aria-label="Actions">
-  <button class="btn primary" id="drawBtn">Draw a card <kbd>Space</kbd></button>
-  <button class="btn" id="playBtn">Play selected <kbd>Enter</kbd></button>
-  <label class="rig" for="rig"><input type="checkbox" id="rig"> Rig my next draw to be a Fuse Cat</label>
-  <button class="btn" id="dealBtn">Deal again</button>
+<nav class="actions" aria-label="Hành động">
+  <button class="btn primary" id="drawBtn">Rút bài <kbd>Space</kbd></button>
+  <button class="btn" id="playBtn">Đánh lá đã chọn <kbd>Enter</kbd></button>
+  <label class="rig" for="rig"><input type="checkbox" id="rig"> Gài cho lần rút tới trúng Mèo Bom</label>
+  <button class="btn" id="dealBtn">Chia ván mới</button>
 </nav>
 
 <ol id="log" aria-live="polite"></ol>
-<div id="help">Click a card to select it, click again to play.<br>Drag the table to look around.</div>
+<div id="help">Bấm vào lá bài để chọn, bấm lần nữa để đánh.<br>Kéo bàn để xoay góc nhìn.</div>
 
 <div class="panel" id="fusePanel" hidden>
   <div class="fusehead">
     <div class="ring"><svg width="58" height="58" viewBox="0 0 58 58"><circle cx="29" cy="29" r="25" fill="none" stroke="rgba(255,255,255,.12)" stroke-width="6"/><circle id="fuseArc" cx="29" cy="29" r="25" fill="none" stroke="#ff5b3d" stroke-width="6" stroke-linecap="round" stroke-dasharray="157.08" stroke-dashoffset="0"/></svg><b id="fuseSec">5</b></div>
-    <div><h2>You drew a Fuse Cat!</h2><p id="fuseHint">Play a Snip to cut the fuse, or it blows.</p></div>
+    <div><h2>Bạn rút trúng Mèo Bom!</h2><p id="fuseHint">Đánh Cắt Ngòi để dập ngòi nổ, không thì bùm.</p></div>
   </div>
-  <div class="row"><button class="btn go" id="snipBtn">Snip the fuse</button><button class="btn danger" id="boomBtn">Let it blow</button></div>
+  <div class="row"><button class="btn go" id="snipBtn">Cắt ngòi</button><button class="btn danger" id="boomBtn">Kệ cho nổ</button></div>
 </div>
 
 <div class="panel" id="placePanel" hidden>
-  <h2>Hide the Fuse Cat</h2>
-  <p>Only you see where it goes. Everyone else sees it slide into the deck.</p>
+  <h2>Giấu Mèo Bom</h2>
+  <p>Chỉ bạn biết nó nằm ở đâu. Người khác chỉ thấy nó trượt vào chồng bài.</p>
   <div class="row">
-    <button class="btn" data-pos="top">On top</button>
-    <button class="btn" data-pos="middle">Middle</button>
-    <button class="btn" data-pos="bottom">Bottom</button>
-    <button class="btn" data-pos="random">Random</button>
+    <button class="btn" data-pos="top">Trên cùng</button>
+    <button class="btn" data-pos="middle">Ở giữa</button>
+    <button class="btn" data-pos="bottom">Dưới cùng</button>
+    <button class="btn" data-pos="random">Ngẫu nhiên</button>
   </div>
 </div>
 
 <div class="panel" id="peekPanel" hidden>
-  <h2>Top 3 cards</h2>
-  <p>Left is the next card you'd draw. Only you can see these.</p>
-  <div class="row"><button class="btn primary" id="peekDone">Done</button></div>
+  <h2>3 lá trên cùng</h2>
+  <p>Lá bên trái là lá bạn sẽ rút tiếp theo. Chỉ mình bạn thấy.</p>
+  <div class="row"><button class="btn primary" id="peekDone">Xong</button></div>
 </div>
 
 <div class="panel" id="overPanel" hidden>
-  <h2 id="overTitle">You win!</h2>
+  <h2 id="overTitle">Bạn thắng!</h2>
   <p id="overText"></p>
-  <div class="row"><button class="btn primary" id="againBtn">Deal again</button></div>
+  <div class="row"><button class="btn primary" id="againBtn">Chia ván mới</button></div>
 </div>
 
 <div id="toast" role="status"></div>
-<div id="err" hidden><div><h2 style="font-family:var(--display)">The 3D table couldn't start</h2><p style="color:var(--muted)">This page needs WebGL. Try a recent Chrome, Edge, Safari or Firefox.</p></div></div>
+<div id="err" hidden><div><h2 style="font-family:var(--display)">Không mở được bàn chơi 3D</h2><p style="color:var(--muted)">Trang này cần WebGL. Hãy thử Chrome, Edge, Safari hoặc Firefox bản mới.</p></div></div>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
 <script>
 (async function(){
 const $ = s => document.querySelector(s);
+document.documentElement.lang = 'vi';
 if(!window.THREE){ $('#err').hidden = false; return; }
 const T = THREE;
 const REDUCE = matchMedia('(prefers-reduced-motion: reduce)').matches;
@@ -218,29 +219,29 @@ const shuffle = a => { for(let i=a.length-1;i>0;i--){ const j=Math.floor(Math.ra
 
 /* ---------- card catalogue (original names, see docs/GAME_DESIGN.md) ---------- */
 const TYPES = {
-  fuse:    {name:'Fuse Cat', color:'#2a2231', text:'Draw me and you blow up. Unless you Snip.'},
-  snip:    {name:'Snip',     color:'#3a9a62', text:'Cut the fuse, then hide the Fuse Cat back in the deck.'},
-  hiss:    {name:'Hiss',     color:'#cf4232', text:'Cancel any action. Play it any time.'},
-  pounce:  {name:'Pounce',   color:'#e9822a', text:'End your turn. The next player takes 2 turns.'},
-  catnap:  {name:'Catnap',   color:'#3c73c8', text:'End your turn without drawing.'},
-  bribe:   {name:'Bribe',    color:'#c29a22', text:'Pick a player. They give you a card.'},
-  scramble:{name:'Scramble', color:'#7d52c4', text:'Shuffle the draw pile.'},
-  peek:    {name:'Peek',     color:'#23a09e', text:'Look at the top 3 cards.'},
-  toast:   {name:'Toast Cat',  color:'#d99456', alley:1},
-  disco:   {name:'Disco Cat',  color:'#cc5fa6', alley:1},
-  potato:  {name:'Potato Cat', color:'#a78a52', alley:1},
-  wizard:  {name:'Wizard Cat', color:'#5b62c9', alley:1},
-  ninja:   {name:'Ninja Loaf', color:'#454b5a', alley:1},
+  fuse:    {name:'Mèo Bom', color:'#2a2231', text:'Rút trúng là nổ tung. Trừ khi bạn Cắt Ngòi.'},
+  snip:    {name:'Cắt Ngòi', color:'#3a9a62', text:'Cắt ngòi nổ, rồi giấu Mèo Bom lại vào chồng bài.'},
+  hiss:    {name:'Khè!', color:'#cf4232', text:'Hủy một lá hành động bất kỳ. Đánh lúc nào cũng được.'},
+  pounce:  {name:'Vồ Mồi', color:'#e9822a', text:'Kết thúc lượt. Người kế tiếp phải đi 2 lượt.'},
+  catnap:  {name:'Ngủ Trưa', color:'#3c73c8', text:'Kết thúc lượt mà không phải rút bài.'},
+  bribe:   {name:'Mua Chuộc', color:'#c29a22', text:'Chọn một người. Họ phải đưa bạn một lá.'},
+  scramble:{name:'Xáo Bài', color:'#7d52c4', text:'Xáo trộn chồng bài rút.'},
+  peek:    {name:'Nhìn Trộm', color:'#23a09e', text:'Xem trước 3 lá trên cùng của chồng bài.'},
+  toast:   {name:'Mèo Bánh Mì',  color:'#d99456', alley:1},
+  disco:   {name:'Mèo Disco',  color:'#cc5fa6', alley:1},
+  potato:  {name:'Mèo Khoai Tây', color:'#a78a52', alley:1},
+  wizard:  {name:'Mèo Phù Thủy', color:'#5b62c9', alley:1},
+  ninja:   {name:'Mèo Ninja', color:'#454b5a', alley:1},
 };
-for(const k in TYPES) if(TYPES[k].alley) TYPES[k].text = 'Alley Cat. Play a pair to steal a card.';
+for(const k in TYPES) if(TYPES[k].alley) TYPES[k].text = 'Mèo Hẻm. Đánh một đôi để cướp một lá.';
 const ACTIONS = ['pounce','catnap','bribe','scramble','peek'];
 
 const SEATS = [
-  {name:'You',     fur:'#e7a35c', accent:'#ffb547'},
-  {name:'Mochi',   fur:'#f1ece4', accent:'#4fc3f7'},
-  {name:'Biscuit', fur:'#d4843a', accent:'#7ed957'},
-  {name:'Pickles', fur:'#3d3843', accent:'#ff6fa8'},
-  {name:'Noodle',  fur:'#9b9ba6', accent:'#b48cff'},
+  {name:'Bạn',     fur:'#e7a35c', accent:'#ffb547'},
+  {name:'Bông',    fur:'#f1ece4', accent:'#4fc3f7'},
+  {name:'Mướp',    fur:'#d4843a', accent:'#7ed957'},
+  {name:'Mun',     fur:'#3d3843', accent:'#ff6fa8'},
+  {name:'Khói',    fur:'#9b9ba6', accent:'#b48cff'},
 ];
 
 /* ---------- renderer / scene ---------- */
@@ -261,7 +262,7 @@ scene.fog = new T.Fog('#140e0c', 11, 22);
 const camera = new T.PerspectiveCamera(45, 1, .1, 60);
 scene.add(camera);
 
-try { await Promise.race([Promise.all([document.fonts.load('600 40px Fredoka'), document.fonts.load('700 20px Nunito')]), new Promise(r=>setTimeout(r,1500))]); } catch(e){}
+try { await Promise.race([Promise.all([document.fonts.load('700 40px "Baloo 2"', 'Mèo Bom'), document.fonts.load('700 20px Nunito', 'Mèo Bom')]), new Promise(r=>setTimeout(r,1500))]); } catch(e){}
 
 /* lights */
 scene.add(new T.HemisphereLight('#ffd9a8', '#2a1a14', .32));
@@ -379,7 +380,7 @@ function art(x, type, cx, cy){
   eyes(x, cx, cy, kind, ink);
   if(type === 'ninja'){ x.fillStyle = '#20232b'; x.fillRect(cx-84, cy-26, 168, 34); x.fillStyle = '#fff'; for(const s of [-1,1]){ x.beginPath(); x.ellipse(cx+s*30, cy-9, 12, 5, 0, 0, Math.PI*2); x.fill(); } x.fillStyle = '#d0453a'; x.fillRect(cx+78, cy-24, 34, 10); }
   if(type === 'wizard'){ x.fillStyle = '#2f2f86'; x.beginPath(); x.moveTo(cx-60, cy-60); x.lineTo(cx+10, cy-160); x.lineTo(cx+60, cy-60); x.closePath(); x.fill(); star(x, cx+8, cy-100, 12, 5, '#ffd86b', 5); }
-  if(type === 'catnap'){ x.fillStyle = '#fff'; x.font = '700 34px Fredoka, sans-serif'; x.fillText('z', cx+86, cy-60); x.font = '700 24px Fredoka, sans-serif'; x.fillText('z', cx+108, cy-88); }
+  if(type === 'catnap'){ x.fillStyle = '#fff'; x.font = '700 34px "Baloo 2", sans-serif'; x.fillText('z', cx+86, cy-60); x.font = '700 24px "Baloo 2", sans-serif'; x.fillText('z', cx+108, cy-88); }
   if(type === 'snip'){ x.save(); x.translate(cx+56, cy+58); x.rotate(-.6); x.strokeStyle = '#2a1f2c'; x.lineWidth = 7; x.fillStyle = '#cfd6dc';
     for(const s of [-1,1]){ x.save(); x.rotate(s*.28); x.beginPath(); x.moveTo(0,0); x.lineTo(70, -6*s); x.lineTo(70, 4*s); x.closePath(); x.fill(); x.stroke(); x.restore(); }
     for(const s of [-1,1]){ x.beginPath(); x.arc(-26, s*18, 15, 0, Math.PI*2); x.fillStyle = '#e44d3a'; x.fill(); x.stroke(); }
@@ -396,10 +397,10 @@ function faceTex(type){
   x.save(); rr(x, 14, 14, 292, 420, 20); x.clip(); x.globalAlpha = .07; x.fillStyle = '#fff';
   for(let i=-460;i<330;i+=34){ x.beginPath(); x.moveTo(i,14); x.lineTo(i+16,14); x.lineTo(i+16+420,434); x.lineTo(i+420,434); x.fill(); } x.restore();
   x.textAlign = 'center'; x.textBaseline = 'middle';
-  x.fillStyle = '#fff8ec'; x.font = '600 38px Fredoka, sans-serif'; x.fillText(info.name, 160, 58);
+  x.fillStyle = '#fff8ec'; let fs = 40; do { x.font = `700 ${fs}px "Baloo 2", sans-serif`; fs -= 2; } while(x.measureText(info.name).width > 270 && fs > 20); x.fillText(info.name, 160, 60);
   art(x, type, 160, 200);
   rr(x, 28, 320, 264, 96, 14); x.fillStyle = 'rgba(0,0,0,.24)'; x.fill();
-  x.fillStyle = '#fff8ec'; x.font = '700 20px Nunito, sans-serif'; wrap(x, info.text, 160, 368, 236, 25);
+  x.fillStyle = '#fff8ec'; x.font = '700 19px Nunito, sans-serif'; wrap(x, info.text, 160, 368, 240, 24);
   const t = new T.CanvasTexture(c); t.encoding = T.sRGBEncoding; t.anisotropy = maxAniso;
   return texCache[type] = t;
 }
@@ -415,7 +416,7 @@ const backTex = (() => {
   x.save(); x.translate(160, 214); x.scale(.62, .62); catHead(x, 0, 0, '#ffb547', '#2d2136', 'round'); x.restore();
   x.fillStyle = '#2d2136'; for(const s of [-1,1]){ x.beginPath(); x.arc(160+s*19, 210, 7, 0, Math.PI*2); x.fill(); }
   x.strokeStyle = '#d9c3a0'; x.lineWidth = 5; x.beginPath(); x.moveTo(170, 168); x.quadraticCurveTo(200, 140, 192, 122); x.stroke(); star(x, 192, 118, 15, 6, '#fff3b0', 8);
-  x.fillStyle = '#ffb547'; x.textAlign = 'center'; x.font = '700 40px Fredoka, sans-serif'; x.fillText('FUSE CATS', 160, 340);
+  x.fillStyle = '#ffb547'; x.textAlign = 'center'; x.font = '800 46px "Baloo 2", sans-serif'; x.fillText('MÈO BOM', 160, 344);
   const t = new T.CanvasTexture(c); t.encoding = T.sRGBEncoding; t.anisotropy = maxAniso; return t;
 })();
 
@@ -608,7 +609,7 @@ function makeLabels(){
 function refreshLabels(){
   S.players.forEach((p, i) => {
     if(!p.label) return;
-    p.labelCount.textContent = p.alive ? p.hand.length + ' cards' : 'out';
+    p.labelCount.textContent = p.alive ? p.hand.length + ' lá' : 'đã nổ';
     p.label.classList.toggle('turn', S.turn === i && !S.over && p.alive);
     p.label.classList.toggle('out', !p.alive);
     p.label.classList.toggle('target', S.phase === 'target' && p.alive && p.hand.length > 0);
@@ -697,7 +698,7 @@ let hissResolve = null;
 async function hissWindow(actor, type, target){
   let hisses = 0, last = actor;
   while(true){
-    const h = await openWindow(last, hisses === 0 ? `${S.players[actor].name} played ${TYPES[type].name}.` : `${S.players[last].name} hissed!`, type, target, actor);
+    const h = await openWindow(last, hisses === 0 ? `${S.players[actor].name} đánh ${TYPES[type].name}.` : `${S.players[last].name} vừa khè!`, type, target, actor);
     if(h === null) break;
     hisses++; last = h;
   }
@@ -708,7 +709,7 @@ function openWindow(last, text, type, target, actor){
   return new Promise(async res => {
     const bar = $('#hissbar'), btn = $('#hissBtn');
     const canMe = last !== 0 && me().alive && me().hand.some(it => it.type === 'hiss');
-    $('#hissText').textContent = text + ' Anyone Hiss?';
+    $('#hissText').textContent = text + ' Có ai Khè không?';
     btn.hidden = !canMe; bar.hidden = false;
     // a bot may decide to hiss
     const bots = S.players.map((p,i) => i).filter(i => i !== 0 && i !== last && S.players[i].alive && S.players[i].hand.includes('hiss'));
@@ -735,8 +736,8 @@ function openWindow(last, text, type, target, actor){
     if(h === 0){ const it = me().hand.find(x => x.type === 'hiss'); mesh = cardFromHand(it); }
     else { const p = S.players[h]; p.hand.splice(p.hand.indexOf('hiss'), 1); rebuildFan(h); mesh = cardFromFan(h, 'hiss', false); }
     refreshLabels(); updateButtons();
-    pop('HISS!');
-    log(`${S.players[h].name} hissed.`);
+    pop('KHÈ!');
+    log(`${S.players[h].name} khè!`);
     const under = discardMeshes[discardMeshes.length-1];
     await toDiscard(mesh, .45);
     await swat(h, under);
@@ -791,7 +792,7 @@ async function deal(n){
     p.fan = new T.Group(); p.fan.position.copy(dir.clone().multiplyScalar(2.75)).setY(.01); p.fan.lookAt(0, .01, 0); scene.add(p.fan);
   });
   makeLabels(); updateStats(); updateButtons(); logEl.innerHTML = '';
-  banner('Dealing…');
+  banner('Đang chia bài…');
   // deal round-robin, a card at a time flying from the deck
   const order = [];
   for(let r=0;r<8;r++) for(let i=0;i<n;i++) order.push([i, hands[i][r]]);
@@ -808,7 +809,7 @@ async function deal(n){
   }
   await wait(.45);
   if(gen !== S.gen) return;
-  log(`Dealt 7 cards and a Snip to ${n} players. ${n-1} Fuse Cat${n>2?'s':''} hidden in the deck.`);
+  log(`Đã chia 7 lá và 1 Cắt Ngòi cho ${n} người. Có ${n-1} Mèo Bom ẩn trong chồng bài.`);
   S.turn = 0; S.pending = 1; ringTarget = seatAngle(0);
   startMyTurn();
 }
@@ -816,7 +817,7 @@ async function deal(n){
 /* ---------- turns ---------- */
 function startMyTurn(){
   S.busy = false; S.phase = 'mine';
-  banner(S.pending > 1 ? 'Your turn' : 'Your turn: play cards, then draw', S.pending);
+  banner(S.pending > 1 ? 'Lượt của bạn' : 'Lượt của bạn: đánh bài rồi rút', S.pending);
   refreshLabels(); updateButtons();
 }
 function setTurn(i, pending){
@@ -843,7 +844,7 @@ async function continueTurns(){
 async function botTurn(i){
   S.phase = 'bot'; S.busy = true; updateButtons();
   const p = S.players[i];
-  banner(`${p.name}'s turn`, S.pending);
+  banner(`Lượt của ${p.name}`, S.pending);
   const cat = p.cat; const head = cat.userData.headPivot;
   tween(.5, e => head.rotation.x = Math.sin(e*Math.PI)*.25);
   await wait(.8);
@@ -877,18 +878,18 @@ async function playAction(actor, type, target){
   if(actor === 0){ mesh = cardFromHand(me().hand.find(it => it.type === type && it === S.selected) || me().hand.find(it => it.type === type)); }
   else { P.hand.splice(P.hand.indexOf(type), 1); rebuildFan(actor); mesh = cardFromFan(actor, type, false); }
   refreshLabels(); updateButtons();
-  log(`${P.name} played ${TYPES[type].name}${target !== undefined ? ' on ' + S.players[target].name : ''}.`);
+  log(`${P.name} đánh ${TYPES[type].name}${target !== undefined ? ' vào ' + S.players[target].name : ''}.`);
   if(actor !== 0 && P.cat) leap(P.cat, type === 'pounce' ? S.players[nextAlive(actor)] : null);
   await toDiscard(mesh, .55);
   const canceled = await hissWindow(actor, type, target);
-  if(canceled){ log(`${TYPES[type].name} was canceled.`); return 'canceled'; }
+  if(canceled){ log(`${TYPES[type].name} đã bị hủy.`); return 'canceled'; }
   switch(type){
-    case 'catnap': log(`${P.name} curls up and skips the draw.`); endTurn(false); return 'ended';
-    case 'pounce': log(`${S.players[nextAlive(actor)].name} must take ${(S.pending > 1 ? S.pending - 1 : 0) + 2} turns.`); endTurn(true); return 'ended';
-    case 'scramble': await scrambleDeck(); log('The draw pile was shuffled.'); return 'ok';
+    case 'catnap': log(`${P.name} cuộn tròn ngủ, không rút bài.`); endTurn(false); return 'ended';
+    case 'pounce': log(`${S.players[nextAlive(actor)].name} phải đi ${(S.pending > 1 ? S.pending - 1 : 0) + 2} lượt.`); endTurn(true); return 'ended';
+    case 'scramble': await scrambleDeck(); log('Chồng bài đã được xáo.'); return 'ok';
     case 'peek':
       if(actor === 0) await peekTop();
-      else { P.peekBomb = true; const h = P.cat.userData.headPivot; await tween(.8, e => h.rotation.z = Math.sin(e*Math.PI*2)*.25); log(`${P.name} peeked at the top 3 cards.`); }
+      else { P.peekBomb = true; const h = P.cat.userData.headPivot; await tween(.8, e => h.rotation.z = Math.sin(e*Math.PI*2)*.25); log(`${P.name} nhìn trộm 3 lá trên cùng.`); }
       return 'ok';
     case 'bribe': await giveCard(target, actor, true); return 'ok';
   }
@@ -903,26 +904,26 @@ async function playPair(actor, breed, target){
   }
   if(actor !== 0) rebuildFan(actor);
   refreshLabels(); updateButtons();
-  log(`${P.name} played a pair of ${TYPES[breed].name}s on ${S.players[target].name}.`);
+  log(`${P.name} đánh đôi ${TYPES[breed].name} vào ${S.players[target].name}.`);
   await Promise.all(meshes.map((m, k) => wait(k*.12).then(() => toDiscard(m, .5))));
   const canceled = await hissWindow(actor, breed, target);
-  if(canceled){ log('The steal was canceled.'); return; }
+  if(canceled){ log('Lượt cướp bài đã bị hủy.'); return; }
   await giveCard(target, actor, false);
 }
 // move one card from giver to taker (bribe: giver chooses; steal: random)
 async function giveCard(giver, taker, chosen){
   const G = S.players[giver];
-  if(!G.hand.length){ log(`${G.name} has no cards.`); return; }
+  if(!G.hand.length){ log(`${G.name} hết bài.`); return; }
   let type, mesh;
   if(giver === 0){
     const prefer = chosen ? (me().hand.find(it => TYPES[it.type].alley) || pick(me().hand.filter(it => it.type !== 'snip')) || pick(me().hand)) : pick(me().hand);
     type = prefer.type; mesh = cardFromHand(prefer);
-    log(chosen ? `You gave ${S.players[taker].name} your ${TYPES[type].name}. (In the full game you pick.)` : `${S.players[taker].name} stole your ${TYPES[type].name}.`);
+    log(chosen ? `Bạn đưa ${S.players[taker].name} lá ${TYPES[type].name}. (Bản đầy đủ sẽ cho bạn tự chọn.)` : `${S.players[taker].name} cướp lá ${TYPES[type].name} của bạn.`);
   } else {
     type = chosen ? (G.hand.find(t => TYPES[t].alley) || pick(G.hand)) : pick(G.hand);
     G.hand.splice(G.hand.indexOf(type), 1); rebuildFan(giver);
     mesh = cardFromFan(giver, type, false);
-    log(taker === 0 ? `You got a ${TYPES[type].name} from ${G.name}.` : `${G.name} handed a card to ${S.players[taker].name}.`);
+    log(taker === 0 ? `Bạn nhận lá ${TYPES[type].name} từ ${G.name}.` : `${G.name} đưa một lá cho ${S.players[taker].name}.`);
   }
   refreshLabels();
   if(taker === 0){
@@ -951,7 +952,7 @@ async function peekTop(){
   const top = S.deck.slice(-3).reverse();
   const cards = top.map((t, k) => { const c = makeCard(t); c.position.copy(DECK_POS).setY(deckTopY(S.deck.length) + k*.01); c.quaternion.copy(Q_FACEDOWN); scene.add(c); flying.add(c); return c; });
   await Promise.all(cards.map((c, k) => wait(k*.1).then(() => flyTo(c, camera.localToWorld(V((k-1)*.75, .2, -2.6)), camFacing(), .6, .4))));
-  log('You peeked at the top 3 cards.');
+  log('Bạn nhìn trộm 3 lá trên cùng.');
   await choose('peekPanel');
   await Promise.all(cards.map((c, k) => flyTo(c, DECK_POS.clone().setY(deckTopY(S.deck.length)), Q_FACEDOWN, .45, .3)));
   cards.forEach(c => { scene.remove(c); flying.delete(c); });
@@ -971,13 +972,13 @@ async function drawCard(i){
     if(k >= 0){ S.deck.splice(k, 1); } S.deck.push('fuse');
     $('#rig').checked = false;
   }
-  if(!S.deck.length){ log('The deck is empty.'); endTurn(false); return; }
+  if(!S.deck.length){ log('Chồng bài đã hết.'); endTurn(false); return; }
   const type = S.deck.pop(); updateStats();
   const c = makeCard(type); c.position.copy(DECK_POS).setY(deckTopY(S.deck.length+1)); c.quaternion.copy(qFlat(false, -.08)); scene.add(c); flying.add(c);
   if(i === 0){
     await flyTo(c, revealPos(), camFacing(), .8, .7, 1);
     if(type !== 'fuse'){
-      log(`You drew ${/^[AEIOU]/.test(TYPES[type].name) ? 'an' : 'a'} ${TYPES[type].name}.`);
+      log(`Bạn rút được lá ${TYPES[type].name}.`);
       await wait(.35);
       addHandItem(type, c); updateButtons();
       endTurn(false); return;
@@ -986,7 +987,7 @@ async function drawCard(i){
     if(type !== 'fuse'){
       await flyTo(c, fanWorld(i), Q_FACEDOWN, .55, .5, .62);
       scene.remove(c); flying.delete(c); P.hand.push(type); rebuildFan(i); refreshLabels();
-      log(`${P.name} drew a card.`);
+      log(`${P.name} rút một lá.`);
       endTurn(false); return;
     }
     const above = seatDir(i).multiplyScalar(1.5).setY(1.25);
@@ -996,7 +997,7 @@ async function drawCard(i){
 }
 async function fuseMoment(i, card){
   const P = S.players[i];
-  log(`${P.name} drew a Fuse Cat!`);
+  log(`${P.name} rút trúng Mèo Bom!`);
   $('#vignette').classList.add('on');
   sparkers.add(card); card.userData.shake = 1;
   if(!REDUCE){ timeScale = .25; tween(1, e => timeScale = .25 + .75*e, ease.lin, {keep:true, real:true}); }
@@ -1005,7 +1006,7 @@ async function fuseMoment(i, card){
   if(i === 0){
     const has = me().hand.find(it => it.type === 'snip');
     $('#snipBtn').disabled = !has;
-    $('#fuseHint').textContent = has ? 'Play a Snip to cut the fuse, or it blows.' : "You don't have a Snip. Brace yourself.";
+    $('#fuseHint').textContent = has ? 'Đánh Cắt Ngòi để dập ngòi nổ, không thì bùm.' : 'Bạn không có lá Cắt Ngòi. Chuẩn bị tinh thần nhé.';
     const gen = S.gen;
     const countdown = tween(5, e => { $('#fuseSec').textContent = Math.ceil(5 - e*5); $('#fuseArc').setAttribute('stroke-dashoffset', String(157.08*e)); }, ease.lin, {keep:true, real:true})
       .then(() => { if(gen === S.gen && pendingChoice && pendingChoice.el.id === 'fusePanel') resolveChoice('boom'); });
@@ -1026,8 +1027,8 @@ async function fuseMoment(i, card){
     sparkers.delete(card); card.userData.shake = 0;
     $('#vignette').classList.remove('on');
     for(let k=0;k<40;k++) debris.spawn(tip, rvec(.8).add(V(0, .9, 0)), pick(['#8d8a86','#b7b2aa','#6b6763']), 1.4, .12, .5, .3, .95, .55);
-    pop('SNIP!');
-    log(`${P.name} snipped the fuse.`);
+    pop('CẮT!');
+    log(`${P.name} đã cắt ngòi.`);
     toDiscard(sm, .5);
     // where does it go back?
     let pos;
@@ -1040,7 +1041,7 @@ async function fuseMoment(i, card){
     await tween(.35, e => card.position.x = side.x + (DECK_POS.x - side.x)*e, ease.out);
     scene.remove(card); flying.delete(card);
     S.deck.splice(idx, 0, 'fuse'); updateStats();
-    if(i === 0) log(`You hid the Fuse Cat ${pos === 'random' ? 'somewhere random' : pos === 'top' ? 'on top' : 'at the ' + pos}.`);
+    if(i === 0) log(`Bạn giấu Mèo Bom ${({top:'trên cùng', middle:'ở giữa', bottom:'dưới cùng', random:'ở chỗ ngẫu nhiên'})[pos]}.`);
     endTurn(false);
     return;
   }
@@ -1056,9 +1057,9 @@ async function explode(i, card){
   for(let k=0;k<60;k++) debris.spawn(at, rvec(rand(.5, 1.8)), pick(['#2a2420','#3a332e','#1d1916']), rand(1, 2), .3, .9, .4, .94, .8);
   for(let k=0;k<80;k++) glow.spawn(at, rvec(rand(1, 4)), pick(['#ffcf6a','#ff8a3d','#fff1c2']), rand(.3, .8), .18, .02, -2, .94);
   scene.remove(card); flying.delete(card);
-  pop('BOOM!');
+  pop('BÙM!');
   P.alive = false;
-  log(i === 0 ? 'You exploded!' : `${P.name} exploded!`);
+  log(i === 0 ? 'Bạn nổ tung rồi!' : `${P.name} nổ tung!`);
   if(i === 0){
     for(const it of [...me().hand]){ const m = cardFromHand(it); toDiscard(m, rand(.4, .9)); }
   } else {
@@ -1074,14 +1075,14 @@ async function explode(i, card){
   if(left.length === 1){
     S.over = true; S.phase = 'over'; updateButtons(); refreshLabels();
     const w = left[0];
-    $('#overTitle').textContent = w === me() ? 'You win!' : `${w.name} wins!`;
-    $('#overText').textContent = w === me() ? 'Last cat standing. Nicely played.' : 'Deal again to try for the win.';
-    banner(w === me() ? 'You win!' : `${w.name} wins`);
+    $('#overTitle').textContent = w === me() ? 'Bạn thắng!' : `${w.name} thắng!`;
+    $('#overText').textContent = w === me() ? 'Chú mèo cuối cùng còn trụ lại. Chơi hay lắm!' : 'Chia ván mới để phục thù nhé.';
+    banner(w === me() ? 'Bạn thắng!' : `${w.name} thắng`);
     if(w !== me()){ const cat = w.cat; const y0 = cat.position.y; tween(1.2, e => cat.position.y = y0 + Math.abs(Math.sin(e*Math.PI*3))*.4, ease.lin, {keep:true}); }
     $('#overPanel').hidden = false;
     return;
   }
-  if(i === 0) toast('You are out. Watch the others finish, or deal again.');
+  if(i === 0) toast('Bạn bị loại. Xem mọi người chơi tiếp, hoặc chia ván mới.');
   setTurn(nextAlive(i), 1);
 }
 
@@ -1095,20 +1096,20 @@ async function myDraw(){
 async function myPlay(){
   if(S.phase !== 'mine' || S.busy || !S.selected) return;
   const it = S.selected, t = it.type;
-  if(t === 'hiss') return toast('Save Hiss to cancel someone else\'s card.');
-  if(t === 'snip') return toast('Snip only works when you draw a Fuse Cat.');
-  if(t === 'peek' && S.deck.length === 0) return toast('The deck is empty.');
+  if(t === 'hiss') return toast('Giữ lá Khè! để hủy bài của người khác.');
+  if(t === 'snip') return toast('Cắt Ngòi chỉ dùng được khi bạn rút trúng Mèo Bom.');
+  if(t === 'peek' && S.deck.length === 0) return toast('Chồng bài đã hết.');
   const targets = S.players.map((p, i) => i).filter(i => i !== 0 && S.players[i].alive && S.players[i].hand.length);
   if(TYPES[t].alley){
-    if(me().hand.filter(x => x.type === t).length < 2) return toast(`You need a pair of ${TYPES[t].name}s to steal.`);
-    if(!targets.length) return toast('Nobody has cards to steal.');
-    const target = await pickTarget(`Pick a player to steal from`);
+    if(me().hand.filter(x => x.type === t).length < 2) return toast(`Bạn cần một đôi ${TYPES[t].name} để cướp bài.`);
+    if(!targets.length) return toast('Không ai còn bài để cướp.');
+    const target = await pickTarget('Chọn người để cướp bài');
     if(target === null) return;
     S.busy = true; S.phase = 'acting'; updateButtons();
     await playPair(0, t, target);
   } else if(t === 'bribe'){
-    if(!targets.length) return toast('Nobody has cards to give you.');
-    const target = await pickTarget('Pick a player to bribe');
+    if(!targets.length) return toast('Không ai còn bài để đưa bạn.');
+    const target = await pickTarget('Chọn người để mua chuộc');
     if(target === null) return;
     S.busy = true; S.phase = 'acting'; updateButtons();
     if(await playAction(0, t, target) === 'ended') return continueTurns();
@@ -1120,8 +1121,8 @@ async function myPlay(){
 }
 let targetResolve = null;
 function pickTarget(text){
-  S.phase = 'target'; banner(text + ' (Esc to cancel)'); canvas.classList.add('targeting'); refreshLabels(); updateButtons();
-  return new Promise(res => targetResolve = v => { targetResolve = null; canvas.classList.remove('targeting'); S.phase = 'mine'; banner('Your turn: play cards, then draw', S.pending); refreshLabels(); updateButtons(); res(v); });
+  S.phase = 'target'; banner(text + ' (Esc để hủy)'); canvas.classList.add('targeting'); refreshLabels(); updateButtons();
+  return new Promise(res => targetResolve = v => { targetResolve = null; canvas.classList.remove('targeting'); S.phase = 'mine'; banner('Lượt của bạn: đánh bài rồi rút', S.pending); refreshLabels(); updateButtons(); res(v); });
 }
 
 $('#drawBtn').onclick = myDraw;

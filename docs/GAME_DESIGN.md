@@ -1,9 +1,9 @@
-# Fuse Cats: Game Design Document
+# Mèo Bom (Fuse Cats): Game Design Document
 
-**Status:** Draft v0.1 · **Date:** 2026-10-06
+**Status:** Draft v0.2 · **Date:** 2026-10-06 · **Main language:** Vietnamese
 **One-liner:** A 3D, browser-based, online card game for 2 to 5 players in which everyone draws from a shared deck hiding lit-fuse cats, and the last player not blown up wins.
 
-> **Naming & IP note.** The core mechanic is inspired by *Exploding Kittens*. Game rules can't be copyrighted, but names, card text, and artwork can be, and "Exploding Kittens" is a trademark. This project uses its own title (**Fuse Cats**, working name), its own card names, and original art. Nothing from the commercial game's art, card text, or branding goes into the repo.
+> **Naming & IP note.** The core mechanic is inspired by *Exploding Kittens*. Game rules can't be copyrighted, but names, card text, and artwork can be, and "Exploding Kittens" is a trademark. This project uses its own title (**Mèo Bom**, English working name *Fuse Cats*), its own card names, and original art. Nothing from the commercial game's art, card text, or branding goes into the repo.
 
 ---
 
@@ -29,19 +29,21 @@ Players take turns drawing from a shared deck. Drawing a **Fuse Cat** eliminates
 
 ### 2.2 Card set (base deck, 56 cards)
 
-| Card | Count | Effect | Original inspiration |
-|---|---|---|---|
-| **Fuse Cat** | 4 (uses players − 1) | Drawn → you explode and are out, unless you play Snip. | Exploding Kitten |
-| **Snip** | 6 | Cancel a Fuse Cat you just drew; secretly re-insert the Fuse Cat anywhere in the deck. | Defuse |
-| **Hiss** | 5 | Cancel any action card (not Fuse Cat or Snip). Can be played at any time, even out of turn. A Hiss can be Hissed. | Nope |
-| **Pounce** | 4 | End your turn without drawing; the next player takes 2 turns. Stacks: if the target plays Pounce, the next player takes the remaining turns + 2. | Attack |
-| **Catnap** | 4 | End one turn without drawing. | Skip |
-| **Bribe** | 4 | Pick a player; they choose a card from their hand to give you. | Favor |
-| **Scramble** | 4 | Shuffle the draw pile. | Shuffle |
-| **Peek** | 5 | Privately view the top 3 cards of the draw pile. | See the Future |
-| **Alley Cats** (5 breeds × 4) | 20 | No effect alone. Play a pair of the same breed to steal a random card from a chosen player. Play three of a kind to name a card and take it from a player if they have it. | Cat cards |
+Players see the Vietnamese name; the English name is used in code (`fuse`, `snip`, …) and for the English fallback.
 
-Alley Cat breeds (original): **Toast Cat, Disco Cat, Potato Cat, Wizard Cat, Ninja Loaf.**
+| Card (VI / EN) | Count | Effect | Original inspiration |
+|---|---|---|---|
+| **Mèo Bom** / Fuse Cat | 4 (uses players − 1) | Drawn → you explode and are out, unless you play Snip. | Exploding Kitten |
+| **Cắt Ngòi** / Snip | 6 | Cancel a Fuse Cat you just drew; secretly re-insert the Fuse Cat anywhere in the deck. | Defuse |
+| **Khè!** / Hiss | 5 | Cancel any action card (not Fuse Cat or Snip). Can be played at any time, even out of turn. A Hiss can be Hissed. | Nope |
+| **Vồ Mồi** / Pounce | 4 | End your turn without drawing; the next player takes 2 turns. Stacks: if the target plays Pounce, the next player takes the remaining turns + 2. | Attack |
+| **Ngủ Trưa** / Catnap | 4 | End one turn without drawing. | Skip |
+| **Mua Chuộc** / Bribe | 4 | Pick a player; they choose a card from their hand to give you. | Favor |
+| **Xáo Bài** / Scramble | 4 | Shuffle the draw pile. | Shuffle |
+| **Nhìn Trộm** / Peek | 5 | Privately view the top 3 cards of the draw pile. | See the Future |
+| **Mèo Hẻm** / Alley Cats (5 breeds × 4) | 20 | No effect alone. Play a pair of the same breed to steal a random card from a chosen player. Play three of a kind to name a card and take it from a player if they have it. | Cat cards |
+
+Alley Cat breeds (original): **Mèo Bánh Mì** (Toast Cat), **Mèo Disco** (Disco Cat), **Mèo Khoai Tây** (Potato Cat), **Mèo Phù Thủy** (Wizard Cat), **Mèo Ninja** (Ninja Loaf).
 
 ### 2.3 Setup (scales to 2 to 5 players)
 1. Remove all Fuse Cats and Snips from the deck.
@@ -129,7 +131,14 @@ In the physical game, anyone can shout "Nope" at any moment. Online, every actio
 
 ---
 
-## 4. Online multiplayer
+## 4. Language
+
+- **Vietnamese is the main language.** All UI text, card names, card descriptions, the action log and the big announcements ("KHÈ!", "CẮT!", "BÙM!") are written in Vietnamese first.
+- English stays available as a secondary language in settings. All strings live in locale files (`vi.json`, `en.json`); game logic uses language-neutral card ids.
+- Fonts must cover Vietnamese diacritics: **Baloo 2** for display and card titles, **Nunito** for body text (both have Vietnamese subsets on Google Fonts). Card faces are drawn from text at runtime, so translations never need new art.
+- Default bot names are Vietnamese cat names: Bông, Mướp, Mun, Khói.
+
+## 5. Online multiplayer
 
 ### 4.1 Model
 - **Authoritative server.** The server holds the deck and all hands, validates every move, and runs the timers. Clients only send intents (`playCard`, `draw`, `hiss`, `chooseTarget`, `insertFuseCat`) and render the state they're given.
@@ -154,7 +163,7 @@ In the physical game, anyone can shout "Nope" at any moment. Online, every actio
 
 ---
 
-## 5. Recommended tech stack
+## 6. Recommended tech stack
 
 | Layer | Choice | Why |
 |---|---|---|
@@ -169,6 +178,7 @@ In the physical game, anyone can shout "Nope" at any moment. Online, every actio
 | Persistence | None in v1 (in-memory rooms); **Redis** later for scaling rooms across instances | Keep v1 simple. |
 | Assets | **Blender** → glTF (`.glb`), compressed with Draco/Meshopt; KTX2 textures | Small downloads; target under 15 MB first load. |
 | Audio | **Howler.js** | Simple, reliable web audio. |
+| i18n | **i18next** (Vietnamese default, English fallback) | Plain locale files with interpolation for log lines. |
 | Testing | **Vitest** (engine), **Playwright** (lobby and a full bot game in the browser) | Engine correctness is the main risk. |
 | Hosting | Static web on **Vercel/Netlify/Cloudflare Pages**; server on **Fly.io** or **Railway** | Cheap, WebSocket-friendly. |
 
@@ -176,7 +186,7 @@ In the physical game, anyone can shout "Nope" at any moment. Online, every actio
 
 ---
 
-## 6. Proposed repository layout
+## 7. Proposed repository layout
 
 ```
 apps/
@@ -191,7 +201,7 @@ docs/
 
 ---
 
-## 7. Milestones
+## 8. Milestones
 
 1. **Rules engine** – full rules, Hiss chains, Pounce stacking, 2–5 player setup; unit tests; bot vs. bot simulations to check game length and balance.
 2. **Online playable (2D placeholder)** – Colyseus rooms, lobby, per-player views, reconnects, bots. Plain card UI to validate the online flow.
@@ -201,7 +211,7 @@ docs/
 
 ---
 
-## 8. Open questions
+## 9. Open questions
 
 - Final game title and card names (current names are placeholders we're free to use).
 - Turn timer and Hiss window lengths: tune in playtests (starting at 30 s and 3 s).

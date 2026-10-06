@@ -168,13 +168,13 @@ In the physical game, anyone can shout "Nope" at any moment. Online, every actio
 | Layer | Choice | Why |
 |---|---|---|
 | Language | **TypeScript** everywhere | One rules engine shared by server, bots, and tests. |
-| Monorepo | **pnpm workspaces** (`apps/web`, `apps/server`, `packages/engine`) | Simple and fast. |
-| 3D rendering | **Three.js via React Three Fiber** + **drei** | Mature, huge ecosystem, declarative scene graph that plays well with React UI. |
+| Monorepo | **npm workspaces** (`apps/web`, `apps/server`, `packages/engine`) | Works with plain Node, nothing extra to install. |
+| 3D rendering | **Three.js via React Three Fiber** | Mature, huge ecosystem, declarative scene graph that plays well with React UI. |
 | Animation | **@react-spring/three** or GSAP | Springy card motion; timeline control for signature moments. |
 | UI overlay | **React** + **Tailwind CSS** | Fast to build lobby, HUD, and settings. |
 | Client state | **Zustand** | Lightweight store for server snapshots and UI state. |
 | Build | **Vite** | Fast dev server and builds. |
-| Multiplayer server | **Colyseus** (Node) | Rooms, matchmaking, reconnection, and per-client state filtering out of the box. Alternative: plain Socket.IO if we want fewer dependencies. |
+| Multiplayer server | **Socket.IO** (Node) with our own small room manager | Rooms, invite codes, reconnection tokens and per-player views fit in ~400 lines; fewer moving parts than a framework. (Colyseus was the first idea.) |
 | Persistence | None in v1 (in-memory rooms); **Redis** later for scaling rooms across instances | Keep v1 simple. |
 | Assets | **Blender** → glTF (`.glb`), compressed with Draco/Meshopt; KTX2 textures | Small downloads; target under 15 MB first load. |
 | Audio | **Howler.js** | Simple, reliable web audio. |
@@ -191,7 +191,7 @@ In the physical game, anyone can shout "Nope" at any moment. Online, every actio
 ```
 apps/
   web/        React + R3F client (scene, HUD, lobby)
-  server/     Colyseus server (rooms, timers, views)
+  server/     Socket.IO server (rooms, timers, views)
 packages/
   engine/     Pure TS rules engine (state, actions, events, bots)
   assets/     glTF models, textures, audio (source .blend files in LFS)
